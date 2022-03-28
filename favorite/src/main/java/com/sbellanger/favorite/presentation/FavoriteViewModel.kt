@@ -1,6 +1,7 @@
 package com.sbellanger.favorite.presentation
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import com.sbellanger.arch.viewmodel.KtpBaseViewModel
 import com.sbellanger.favorite.domain.usecase.GetFavoriteViewStateUseCase
@@ -26,7 +27,7 @@ class FavoriteViewModel @Inject constructor(application: Application) :
     // DATA
     ///////////////////////////////////////////////////////////////////////////
 
-    override val viewState = MutableLiveData<FavoriteViewState>()
+    override val viewState = mutableStateOf<FavoriteViewState>(FavoriteViewState.Loading)
     override val viewEvent = MutableLiveData<FavoriteViewEvent>()
 
     ///////////////////////////////////////////////////////////////////////////
@@ -45,8 +46,8 @@ class FavoriteViewModel @Inject constructor(application: Application) :
         getFavoriteViewStateUseCase
             .execute()
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe { viewState.postValue(FavoriteViewState.Loading) }
-            .doOnNext { viewState.postValue(it) }
+            .doOnSubscribe { viewState.value = FavoriteViewState.Loading }
+            .doOnNext { viewState.value = it }
             .bindSubAndLog("GetFavoriteViewStateUseCase")
     }
 
@@ -56,5 +57,14 @@ class FavoriteViewModel @Inject constructor(application: Application) :
             .subscribeOn(Schedulers.io())
             .doOnComplete { viewEvent.postValue(FavoriteViewEvent.RepositoryRemoved) }
             .bindSubAndLog("RemoveFavoriteUseCase")
+    }
+
+    override fun requestViewAction(viewAction: FavoriteViewAction) {
+        when (viewAction) {
+            is FavoriteViewAction.RepositoryRemoved -> removeFavorite(viewAction.id)
+            is FavoriteViewAction.GoToIssue -> viewEvent.postValue(
+                FavoriteViewEvent.GoToIssue(viewAction.repositoryName, viewAction.issueCount)
+            )
+        }
     }
 }

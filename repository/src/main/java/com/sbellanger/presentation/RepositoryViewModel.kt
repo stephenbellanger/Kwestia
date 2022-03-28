@@ -1,6 +1,7 @@
 package com.sbellanger.presentation
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import com.sbellanger.arch.viewmodel.KtpBaseViewModel
 import com.sbellanger.domain.model.RepositoryEntity
@@ -19,6 +20,7 @@ class RepositoryViewModel @Inject constructor(application: Application) :
     companion object {
         private const val TEXT_INPUT_DEBOUNCE = 500L
         private const val REPOSITORY_NAME_MIN_LENGTH = 3
+        private const val EMPTY_TEXT = ""
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -38,7 +40,8 @@ class RepositoryViewModel @Inject constructor(application: Application) :
     // DATA
     ///////////////////////////////////////////////////////////////////////////
 
-    override val viewState = MutableLiveData<RepositoryViewState>()
+    override val viewState = mutableStateOf<RepositoryViewState>(RepositoryViewState.Init)
+    override val textInputState = mutableStateOf("")
     override val viewEvent = MutableLiveData<RepositoryViewEvent>()
 
     private val textInput = BehaviorSubject.create<String>()
@@ -64,8 +67,8 @@ class RepositoryViewModel @Inject constructor(application: Application) :
         getRepositoryViewStateUseCase
             .execute(name)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe { viewState.postValue(RepositoryViewState.Loading) }
-            .doOnNext { viewState.postValue(it) }
+            .doOnSubscribe { viewState.value = RepositoryViewState.Loading }
+            .doOnNext { viewState.value = it }
             .bindSubAndLog("GetRepositoryViewStateUseCase")
     }
 
@@ -86,6 +89,21 @@ class RepositoryViewModel @Inject constructor(application: Application) :
     }
 
     override fun setText(text: String) {
+        textInputState.value = text
         textInput.onNext(text)
+    }
+
+    override fun requestViewAction(viewAction: RepositoryViewAction) {
+        when (viewAction) {
+            is RepositoryViewAction.RepositoryAdded -> addRepository(viewAction.repository)
+            is RepositoryViewAction.RepositoryRemoved -> removeRepository(viewAction.repository.id)
+            is RepositoryViewAction.GoToIssue -> viewEvent.postValue(
+                RepositoryViewEvent.GoToIssue(
+                    viewAction.repositoryName,
+                    viewAction.issueCount
+                )
+            )
+            RepositoryViewAction.ClearSearch -> setText(EMPTY_TEXT)
+        }
     }
 }

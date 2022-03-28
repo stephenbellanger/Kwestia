@@ -1,34 +1,31 @@
 package com.sbellanger.ui_kit.view
 
-import android.content.Context
-import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.widget.LinearLayout
-import com.sbellanger.ui_kit.databinding.ViewLoaderBinding
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.sbellanger.ui_kit.R
 
-class LoaderView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // CONFIGURATION
-    ///////////////////////////////////////////////////////////////////////////
-
-    private val binding: ViewLoaderBinding =
-        ViewLoaderBinding
-            .inflate(
-                LayoutInflater.from(context),
-                this@LoaderView,
-                false
-            )
-
-    ///////////////////////////////////////////////////////////////////////////
-    // LIFECYCLE
-    ///////////////////////////////////////////////////////////////////////////
-
-    init {
-        addView(binding.root)
+@ExperimentalAnimationApi
+@Composable
+fun LoaderView(paddingTop: Dp) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = paddingTop)
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(100.dp)
+                .fillMaxSize(),
+            color = colorResource(R.color.white),
+            strokeWidth = 5.dp
+        )
     }
 }

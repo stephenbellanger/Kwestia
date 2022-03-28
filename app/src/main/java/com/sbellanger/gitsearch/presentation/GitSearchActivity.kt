@@ -2,6 +2,8 @@ package com.sbellanger.gitsearch.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.fragment.app.Fragment
 import com.sbellanger.arch.activity.KtpBaseActivity
 import com.sbellanger.arch.helper.hideKeyboard
@@ -13,6 +15,8 @@ import com.sbellanger.ui_kit.helper.isFirstLevel
 import toothpick.config.Module
 import javax.inject.Inject
 
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 class GitSearchActivity : KtpBaseActivity<MainActivityBinding>() {
 
     companion object {

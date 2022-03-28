@@ -1,27 +1,21 @@
 package com.sbellanger.issue.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.sbellanger.arch.fragment.KtpVbBaseFragment
-import com.sbellanger.issue.R
-import com.sbellanger.issue.databinding.IssueFragmentBinding
-import com.sbellanger.issue.domain.model.IssueEntity
-import com.sbellanger.issue.presentation.view.IssueAdapter
-import com.sbellanger.ui_kit.view.SearchView
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.ComposeView
+import com.sbellanger.arch.fragment.KtpBaseFragment
+import com.sbellanger.issue.presentation.view.IssueScreen
 import toothpick.config.Module
 import javax.inject.Inject
 
-class IssueFragment :
-    KtpVbBaseFragment<IssueFragmentBinding>(),
-    IIssueContract.ViewCapability,
-    SearchView.IOnSearchListener {
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
+class IssueFragment : KtpBaseFragment() {
 
     companion object {
         private const val REPOSITORY_NAME_KEY = "REPOSITORY_NAME_KEY"
@@ -45,9 +39,6 @@ class IssueFragment :
     @Inject
     lateinit var navigator: IIssueContract.ViewNavigation
 
-    @Inject
-    lateinit var issueAdapter: IssueAdapter
-
     ///////////////////////////////////////////////////////////////////////////
     // CONFIGURATION
     ///////////////////////////////////////////////////////////////////////////
@@ -55,108 +46,51 @@ class IssueFragment :
     override val modules: Array<Module>
         get() = arrayOf(IssueFragmentModule(this@IssueFragment))
 
-    override fun bindView(inflater: LayoutInflater, container: ViewGroup?): IssueFragmentBinding {
-        return IssueFragmentBinding.inflate(inflater, container, false)
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     ///////////////////////////////////////////////////////////////////////////
 
+    @SuppressLint("MissingSuperCall")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                IssueScreen(
+                    viewState = viewModel.viewState.value,
+                    requireArguments().getString(REPOSITORY_NAME_KEY, ""),
+                    requireArguments().getInt(REPOSITORY_ISSUE_COUNT_KEY),
+                    text = viewModel.textInputState.value,
+                    onTextChange = {
+                        viewModel.setText(it)
+                    },
+                    onEventHandler = viewModel::requestViewAction
+                )
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            it.getString(REPOSITORY_NAME_KEY)?.let { repositoryName ->
-                viewModel.setRepositoryName(repositoryName)
-                setTitle(repositoryName)
-            }
-            setIssueIndicator(it.getInt(REPOSITORY_ISSUE_COUNT_KEY))
+        arguments?.getString(REPOSITORY_NAME_KEY)?.let { repositoryName ->
+            viewModel.setRepositoryName(repositoryName)
         }
 
         viewModel
-            .viewState
-            .distinctUntilChanged()
-            .map { (it as? IssueViewState.Loaded)?.issues ?: emptyList() }
-            .observe(viewLifecycleOwner, this::showIssues)
-
-        viewModel
-            .viewState
-            .distinctUntilChanged()
-            .map { it is IssueViewState.Loading }
-            .observe(viewLifecycleOwner, binding.loader::isVisible::set)
-
-        viewModel
-            .viewState
-            .distinctUntilChanged()
-            .map { it is IssueViewState.Error }
-            .observe(viewLifecycleOwner, binding.errorView::isVisible::set)
-
-        viewModel
-            .viewState
-            .distinctUntilChanged()
-            .map { it is IssueViewState.NoIssue }
-            .observe(viewLifecycleOwner) { if (it) showNoIssue() }
-
-        binding
-            .backArrow
-            .setOnClickListener { navigator.goBack() }
-
-        setupRecyclerView()
-
-        binding.searchField.addSearchListener(this@IssueFragment)
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // SPECIALIZATION
-    ///////////////////////////////////////////////////////////////////////////
-
-    override fun setTitle(repositoryName: String) {
-        binding.title.text = getString(R.string.issue_title, repositoryName)
-    }
-
-    override fun setIssueIndicator(issueNumber: Int) {
-        binding.issueIndicator.setIssueNumber(issueNumber)
-    }
-
-    override fun showIssues(issues: List<IssueEntity>) {
-        hideErrorViews()
-        issueAdapter.setData(issues)
-    }
-
-    override fun showNoIssue() {
-        binding.noResult.visibility = View.VISIBLE
-        issueAdapter.clear()
-    }
-
-    override fun onClear() {
-        issueAdapter.clear()
-        hideErrorViews()
-    }
-
-    override fun onTextChanged(text: String) {
-        viewModel.setText(text)
-    }
-
-    override fun afterTextChanged(text: String) {
-        if (text.isEmpty()) {
-            onClear()
-        }
+            .viewEvent
+            .observe(viewLifecycleOwner, this::handleViewEvent)
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // HELPER
     ///////////////////////////////////////////////////////////////////////////
 
-    private fun setupRecyclerView() {
-        binding.issueResult.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = issueAdapter
+    private fun handleViewEvent(viewEvent: IssueViewEvent) {
+        when (viewEvent) {
+            IssueViewEvent.GoBack -> navigator.goBack()
         }
-    }
-
-    private fun hideErrorViews() {
-        binding.noResult.visibility = View.GONE
-        binding.errorView.visibility = View.GONE
     }
 }

@@ -5,6 +5,7 @@ buildscript {
         depToothpickVersion = '3.1.0'
         depRetrofitVersion = '2.9.0'
         depRoomVersion = '2.5.0-alpha01'
+        depComposeVersion = '1.0.5'
     }
 }
 

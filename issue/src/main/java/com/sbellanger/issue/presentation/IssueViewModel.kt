@@ -1,6 +1,7 @@
 package com.sbellanger.issue.presentation
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import com.sbellanger.arch.viewmodel.KtpBaseViewModel
 import com.sbellanger.issue.domain.usecase.GetIssueViewStateUseCase
@@ -16,6 +17,7 @@ class IssueViewModel @Inject constructor(application: Application) :
     companion object {
         private const val TEXT_INPUT_DEBOUNCE = 500L
         private const val ISSUE_NAME_MIN_LENGTH = 3
+        private const val EMPTY_TEXT = ""
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -29,7 +31,9 @@ class IssueViewModel @Inject constructor(application: Application) :
     // DATA
     ///////////////////////////////////////////////////////////////////////////
 
-    override val viewState = MutableLiveData<IssueViewState>()
+    override val viewState = mutableStateOf<IssueViewState>(IssueViewState.Init)
+    override val viewEvent = MutableLiveData<IssueViewEvent>()
+    override val textInputState = mutableStateOf("")
 
     private var repositoryName: String? = null
     private val textInput = BehaviorSubject.create<String>()
@@ -59,8 +63,8 @@ class IssueViewModel @Inject constructor(application: Application) :
         getIssueViewStateUseCase
             .execute(repositoryName, issueNameFilter)
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe { viewState.postValue(IssueViewState.Loading) }
-            .doOnSuccess { viewState.postValue(it) }
+            .doOnSubscribe { viewState.value = IssueViewState.Loading }
+            .doOnSuccess { viewState.value = it }
             .bindSubAndLog("GetIssueViewStateUseCase")
     }
 
@@ -70,5 +74,15 @@ class IssueViewModel @Inject constructor(application: Application) :
 
     override fun setText(text: String) {
         textInput.onNext(text)
+        textInputState.value = text
     }
+
+    override fun requestViewAction(viewAction: IssueViewAction) {
+        when (viewAction) {
+            IssueViewAction.ClearSearch -> setText(EMPTY_TEXT)
+            IssueViewAction.GoBack -> viewEvent.postValue(IssueViewEvent.GoBack)
+        }
+    }
+
+
 }

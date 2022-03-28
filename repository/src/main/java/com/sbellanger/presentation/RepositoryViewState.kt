@@ -10,4 +10,5 @@ sealed class RepositoryViewState {
     object Loading : RepositoryViewState()
     object Error : RepositoryViewState()
     object NoResult : RepositoryViewState()
+    object Init : RepositoryViewState()
 }

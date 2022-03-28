@@ -10,4 +10,5 @@ sealed class IssueViewState {
 
     object Error : IssueViewState()
     object NoIssue : IssueViewState()
+    object Init : IssueViewState()
 }

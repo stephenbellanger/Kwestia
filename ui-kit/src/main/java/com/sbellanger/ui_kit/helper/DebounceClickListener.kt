@@ -2,6 +2,7 @@ package com.sbellanger.ui_kit.helper
 
 import android.os.SystemClock
 import android.view.View
+import java.util.*
 
 /**
  * A Throttled OnClickListener
@@ -11,16 +12,18 @@ import android.view.View
  *  * @param minimumIntervalMsec The minimum allowed time between clicks - any click sooner than this after a
  *  previous click will be rejected
  */
+private const val minimumInterval = 500L
 
-fun View.clickWithDebounce(debounceTime: Long = 500L, action: () -> Unit) {
-    this.setOnClickListener(object : View.OnClickListener {
-        private var lastClickTime: Long = 0
+class DebounceClickListener(private val onClick: (view: View) -> Unit) : View.OnClickListener {
+    private val lastClickMap: MutableMap<View, Long> = WeakHashMap()
 
-        override fun onClick(v: View) {
-            if (SystemClock.elapsedRealtime() - lastClickTime < debounceTime) return
-            else action()
+    override fun onClick(clickedView: View) {
+        val previousClickTimestamp = lastClickMap[clickedView]
+        val currentTimestamp = SystemClock.uptimeMillis()
 
-            lastClickTime = SystemClock.elapsedRealtime()
+        lastClickMap[clickedView] = currentTimestamp
+        if (previousClickTimestamp == null || currentTimestamp - previousClickTimestamp.toLong() > minimumInterval) {
+            onClick.invoke(clickedView)
         }
-    })
+    }
 }
