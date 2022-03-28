@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_search_icon">Search icon</string>
+    <string name="accessibility_cross_icon">Clear field</string>
+    <string name="accessibility_add_favorite">Add to favorite</string>
+</resources>

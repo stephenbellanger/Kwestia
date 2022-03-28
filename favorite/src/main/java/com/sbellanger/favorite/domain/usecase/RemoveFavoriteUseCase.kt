@@ -1,0 +1,23 @@
+package com.sbellanger.favorite.domain.usecase
+
+import com.sbellanger.favorite.data.IFavoriteRepository
+import io.reactivex.Completable
+import javax.inject.Inject
+
+class RemoveFavoriteUseCase @Inject constructor() {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // DEPENDENCY
+    ///////////////////////////////////////////////////////////////////////////
+
+    @Inject
+    lateinit var repository: IFavoriteRepository
+
+    ///////////////////////////////////////////////////////////////////////////
+    // PUBLIC API
+    ///////////////////////////////////////////////////////////////////////////
+
+    fun execute(id: Int): Completable {
+        return repository.removeFavorite(id)
+    }
+}

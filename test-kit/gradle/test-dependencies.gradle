@@ -1,0 +1,12 @@
+dependencies {
+    // Testing
+    api "androidx.annotation:annotation:1.3.0"
+    api "junit:junit:4.13.2"
+
+    // Mock
+    api "io.mockk:mockk:1.12.1"
+
+    // Toothpick tests
+    api "com.github.stephanenicolas.toothpick:toothpick-testing:$rootProject.depToothpickVersion"
+    api "com.github.stephanenicolas.toothpick:toothpick-testing-junit4:$rootProject.depToothpickVersion"
+}

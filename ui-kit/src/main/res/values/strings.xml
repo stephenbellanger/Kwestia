@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Kwestia</string>
+    <string name="no_result">Sorry, no result...</string>
+    <string name="search_hint">Search or Jump to...</string>
+    <string name="common_search">Search</string>
+    <string name="common_favorite">Favorite</string>
+    <string name="favorite_title">Favorite repository</string>
+    <string name="error_message">Oups, something went wront...</string>
+</resources>

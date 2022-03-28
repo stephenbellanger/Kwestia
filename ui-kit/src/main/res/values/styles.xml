@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateTint" tools:targetApi="lollipop">@color/black</item>
+        <item name="android:indeterminateTintMode" tools:targetApi="lollipop">src_in</item>
+    </style>
+</resources>

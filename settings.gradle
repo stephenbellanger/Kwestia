@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "GitSearch"
+
+include ':app'
+include ':arch'
+include ':issue'
+include ':repository'
+include ':test-kit'
+include ':ui-kit'
+include ':favorite'

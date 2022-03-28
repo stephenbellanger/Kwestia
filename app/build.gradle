@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.sbellanger.gitsearch"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation project(":arch")
+    implementation project(":issue")
+    implementation project(":repository")
+    implementation project(":favorite")
+
+    testImplementation project(":test-kit")
+
+    // Kapt
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$rootProject.depToothpickVersion"
+}

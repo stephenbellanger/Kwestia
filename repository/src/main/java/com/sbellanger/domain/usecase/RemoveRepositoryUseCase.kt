@@ -1,0 +1,23 @@
+package com.sbellanger.domain.usecase
+
+import com.sbellanger.data.IRepositoryRepository
+import io.reactivex.Completable
+import javax.inject.Inject
+
+class RemoveRepositoryUseCase @Inject constructor() {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // DEPENDENCY
+    ///////////////////////////////////////////////////////////////////////////
+
+    @Inject
+    lateinit var repository: IRepositoryRepository
+
+    ///////////////////////////////////////////////////////////////////////////
+    // PUBLIC API
+    ///////////////////////////////////////////////////////////////////////////
+
+    fun execute(id: Int): Completable {
+        return repository.removeRepository(id)
+    }
+}
