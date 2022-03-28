@@ -7,13 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.platform.ComposeView
-import com.sbellanger.arch.fragment.KtpBaseFragment
+import androidx.fragment.app.viewModels
+import com.sbellanger.arch.fragment.BaseFragment
 import com.sbellanger.favorite.presentation.view.FavoriteScreen
-import toothpick.config.Module
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @ExperimentalAnimationApi
-class FavoriteFragment : KtpBaseFragment() {
+@AndroidEntryPoint
+class FavoriteFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = FavoriteFragment()
@@ -23,18 +25,10 @@ class FavoriteFragment : KtpBaseFragment() {
     // DEPENDENCY
     ///////////////////////////////////////////////////////////////////////////
 
-    @Inject
-    lateinit var viewModel: IFavoriteContract.ViewModel
+    private val viewModel: FavoriteViewModel by viewModels()
 
     @Inject
     lateinit var navigator: IFavoriteContract.ViewNavigation
-
-    ///////////////////////////////////////////////////////////////////////////
-    // CONFIGURATION
-    ///////////////////////////////////////////////////////////////////////////
-
-    override val modules: Array<Module>
-        get() = arrayOf(FavoriteFragmentModule(this@FavoriteFragment))
 
     ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
@@ -58,6 +52,8 @@ class FavoriteFragment : KtpBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.requestViewState()
 
         viewModel
             .viewEvent

@@ -2,12 +2,17 @@ package com.sbellanger.issue.di
 
 import com.sbellanger.issue.data.IIssueRepository
 import com.sbellanger.issue.data.IssueRepository
-import toothpick.config.Module
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-class IssueModule : Module() {
-    init {
-        bind(IIssueRepository::class.java)
-            .to(IssueRepository::class.java)
-            .singleton()
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class IssueModule {
+
+    @Binds
+    abstract fun bindIIssueRepository(
+        issueRepository: IssueRepository
+    ): IIssueRepository
 }

@@ -3,14 +3,16 @@ package com.sbellanger.favorite.presentation
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
-import com.sbellanger.arch.viewmodel.KtpBaseViewModel
+import com.sbellanger.arch.viewmodel.BaseViewModel
 import com.sbellanger.favorite.domain.usecase.GetFavoriteViewStateUseCase
 import com.sbellanger.favorite.domain.usecase.RemoveFavoriteUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+@HiltViewModel
 class FavoriteViewModel @Inject constructor(application: Application) :
-    KtpBaseViewModel(application),
+    BaseViewModel(application),
     IFavoriteContract.ViewModel {
 
     ///////////////////////////////////////////////////////////////////////////
@@ -29,14 +31,6 @@ class FavoriteViewModel @Inject constructor(application: Application) :
 
     override val viewState = mutableStateOf<FavoriteViewState>(FavoriteViewState.Loading)
     override val viewEvent = MutableLiveData<FavoriteViewEvent>()
-
-    ///////////////////////////////////////////////////////////////////////////
-    // LIFECYCLE
-    ///////////////////////////////////////////////////////////////////////////
-
-    init {
-        requestViewState()
-    }
 
     ///////////////////////////////////////////////////////////////////////////
     // SPECIALIZATION

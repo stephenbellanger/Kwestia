@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sbellanger.ui_kit.R
-import com.sbellanger.ui_kit.view.ErrorView
 
 @ExperimentalAnimationApi
 @Composable

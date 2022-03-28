@@ -4,7 +4,7 @@ import com.sbellanger.arch.network.BaseApiFactory
 import com.sbellanger.arch.network.IWsConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import toothpick.ktp.KTP
+import javax.inject.Inject
 
 abstract class BaseGithubApiFactory<API> : BaseApiFactory<API>() {
 
@@ -12,18 +12,12 @@ abstract class BaseGithubApiFactory<API> : BaseApiFactory<API>() {
     // DEPENDENCY
     ///////////////////////////////////////////////////////////////////////////
 
-    override val configWs: IWsConfig
-        get() = KTP
-            .openRootScope()
-            .getInstance(IWsConfig::class.java)
+    @Inject
+    override lateinit var configWs: IWsConfig
 
-    override val httpClient: OkHttpClient
-        get() = KTP
-            .openRootScope()
-            .getInstance(OkHttpClient::class.java)
+    @Inject
+    override lateinit var httpClient: OkHttpClient
 
-    override val retrofit: Retrofit
-        get() = KTP
-            .openRootScope()
-            .getInstance(Retrofit::class.java)
+    @Inject
+    override lateinit var retrofit: Retrofit
 }

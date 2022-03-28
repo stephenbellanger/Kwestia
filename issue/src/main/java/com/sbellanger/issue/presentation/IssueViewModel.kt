@@ -3,15 +3,17 @@ package com.sbellanger.issue.presentation
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
-import com.sbellanger.arch.viewmodel.KtpBaseViewModel
+import com.sbellanger.arch.viewmodel.BaseViewModel
 import com.sbellanger.issue.domain.usecase.GetIssueViewStateUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@HiltViewModel
 class IssueViewModel @Inject constructor(application: Application) :
-    KtpBaseViewModel(application),
+    BaseViewModel(application),
     IIssueContract.ViewModel {
 
     companion object {

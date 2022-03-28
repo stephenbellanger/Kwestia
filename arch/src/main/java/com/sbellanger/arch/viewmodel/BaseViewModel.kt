@@ -9,10 +9,8 @@ import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
-import toothpick.ktp.KTP
 
-abstract class BaseViewModel(application: Application) :
-    AndroidViewModel(application) {
+abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
     ///////////////////////////////////////////////////////////////////////////
     // DATA
@@ -24,21 +22,14 @@ abstract class BaseViewModel(application: Application) :
     // LIFECYCLE
     ///////////////////////////////////////////////////////////////////////////
 
-    init {
-        onCreated()
-    }
-
     @CallSuper
     protected open fun onCreated() {
         Timber.v(timberConcreteClassLinkTag)
-        KTP.openRootScope()
-            .openSubScope(this)
     }
 
     @CallSuper
     override fun onCleared() {
         Timber.v(timberConcreteClassLinkTag)
-        KTP.closeScope(this)
         super.onCleared()
     }
 

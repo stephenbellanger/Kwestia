@@ -6,6 +6,11 @@ buildscript {
         depRetrofitVersion = '2.9.0'
         depRoomVersion = '2.5.0-alpha01'
         depComposeVersion = '1.0.5'
+        depHiltVersion = '2.40.5'
+    }
+
+    dependencies {
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$project.depHiltVersion"
     }
 }
 

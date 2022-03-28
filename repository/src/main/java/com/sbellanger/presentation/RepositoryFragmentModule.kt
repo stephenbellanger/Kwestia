@@ -1,15 +1,21 @@
 package com.sbellanger.presentation
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import toothpick.config.Module
-import toothpick.ktp.binding.bind
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 
-class RepositoryFragmentModule(fragment: Fragment) : Module() {
-    init {
-        bind<IRepositoryContract.ViewModel>()
-            .toInstance(ViewModelProvider(fragment)[RepositoryViewModel::class.java])
-        bind<IRepositoryContract.ViewNavigation>()
-            .toClass<RepositoryNavigator>()
-    }
+@Module
+@InstallIn(FragmentComponent::class)
+abstract class RepositoryFragmentModule {
+
+    /*@Binds
+    abstract fun bindIIRepositoryContractViewModel(
+        repositoryViewModel: RepositoryViewModel
+    ): IRepositoryContract.ViewModel*/
+
+    @Binds
+    abstract fun bindIRepositoryContractViewNavigation(
+        repositoryNavigator: RepositoryNavigator
+    ): IRepositoryContract.ViewNavigation
 }

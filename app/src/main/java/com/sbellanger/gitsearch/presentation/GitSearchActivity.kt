@@ -12,11 +12,12 @@ import com.sbellanger.gitsearch.R
 import com.sbellanger.gitsearch.databinding.MainActivityBinding
 import com.sbellanger.presentation.RepositoryFragment
 import com.sbellanger.ui_kit.helper.isFirstLevel
-import toothpick.config.Module
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
+@AndroidEntryPoint
 class GitSearchActivity : KtpBaseActivity<MainActivityBinding>() {
 
     companion object {
@@ -48,9 +49,6 @@ class GitSearchActivity : KtpBaseActivity<MainActivityBinding>() {
 
     @Inject
     override lateinit var binding: MainActivityBinding
-
-    override val modules: Array<Module>
-        get() = arrayOf(GitSearchActivityModule(this@GitSearchActivity))
 
     ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE

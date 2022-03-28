@@ -4,16 +4,22 @@ import com.sbellanger.favorite.data.FavoriteDataStore
 import com.sbellanger.favorite.data.FavoriteRepository
 import com.sbellanger.favorite.data.IFavoriteDataStore
 import com.sbellanger.favorite.data.IFavoriteRepository
-import toothpick.config.Module
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-class FavoriteModule : Module() {
-    init {
-        bind(IFavoriteRepository::class.java)
-            .to(FavoriteRepository::class.java)
-            .singleton()
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class FavoriteModule {
 
-        bind(IFavoriteDataStore::class.java)
-            .to(FavoriteDataStore::class.java)
-            .singleton()
-    }
+    @Binds
+    abstract fun bindIFavoriteRepository(
+        favoriteRepository: FavoriteRepository
+    ): IFavoriteRepository
+
+    @Binds
+    abstract fun bindIFavoriteDataStore(
+        favoriteDataStore: FavoriteDataStore
+    ): IFavoriteDataStore
 }

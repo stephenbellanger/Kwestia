@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -43,5 +44,6 @@ dependencies {
     testImplementation project(":test-kit")
 
     // Kapt
-    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$rootProject.depToothpickVersion"
+    kapt "com.google.dagger:hilt-android:$project.depHiltVersion"
+    kapt "com.google.dagger:hilt-compiler:$project.depHiltVersion"
 }

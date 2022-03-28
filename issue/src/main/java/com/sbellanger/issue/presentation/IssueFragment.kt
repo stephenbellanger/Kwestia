@@ -8,14 +8,16 @@ import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.ComposeView
-import com.sbellanger.arch.fragment.KtpBaseFragment
+import androidx.fragment.app.viewModels
+import com.sbellanger.arch.fragment.BaseFragment
 import com.sbellanger.issue.presentation.view.IssueScreen
-import toothpick.config.Module
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
-class IssueFragment : KtpBaseFragment() {
+@AndroidEntryPoint
+class IssueFragment : BaseFragment() {
 
     companion object {
         private const val REPOSITORY_NAME_KEY = "REPOSITORY_NAME_KEY"
@@ -33,18 +35,10 @@ class IssueFragment : KtpBaseFragment() {
     // DEPENDENCY
     ///////////////////////////////////////////////////////////////////////////
 
-    @Inject
-    lateinit var viewModel: IIssueContract.ViewModel
+    private val viewModel: IssueViewModel by viewModels()
 
     @Inject
     lateinit var navigator: IIssueContract.ViewNavigation
-
-    ///////////////////////////////////////////////////////////////////////////
-    // CONFIGURATION
-    ///////////////////////////////////////////////////////////////////////////
-
-    override val modules: Array<Module>
-        get() = arrayOf(IssueFragmentModule(this@IssueFragment))
 
     ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE

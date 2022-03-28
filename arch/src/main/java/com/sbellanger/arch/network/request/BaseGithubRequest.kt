@@ -3,7 +3,7 @@ package com.sbellanger.arch.network.request
 import com.sbellanger.arch.network.IWsConfig
 import com.sbellanger.arch.network.api.GithubApiFactory
 import com.sbellanger.arch.network.api.IGithubApi
-import toothpick.ktp.KTP
+import javax.inject.Inject
 
 abstract class BaseGithubRequest : BaseRequest<IGithubApi>() {
 
@@ -11,18 +11,14 @@ abstract class BaseGithubRequest : BaseRequest<IGithubApi>() {
     // DATA
     ///////////////////////////////////////////////////////////////////////////
 
-    private val githubApiFactory: GithubApiFactory
-        get() = KTP
-            .openRootScope()
-            .getInstance(GithubApiFactory::class.java)
+    @Inject
+    lateinit var githubApiFactory: GithubApiFactory
 
     override val api: IGithubApi
         get() = githubApiFactory.api
 
-    override val wsConfig: IWsConfig
-        get() = KTP
-            .openRootScope()
-            .getInstance(IWsConfig::class.java)
+    @Inject
+    override lateinit var wsConfig: IWsConfig
 
     ///////////////////////////////////////////////////////////////////////////
     // PUBLIC API

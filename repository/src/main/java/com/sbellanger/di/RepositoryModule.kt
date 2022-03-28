@@ -4,16 +4,22 @@ import com.sbellanger.data.IRepositoryDataStore
 import com.sbellanger.data.IRepositoryRepository
 import com.sbellanger.data.RepositoryDataStore
 import com.sbellanger.data.RepositoryRepository
-import toothpick.config.Module
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-class RepositoryModule : Module() {
-    init {
-        bind(IRepositoryRepository::class.java)
-            .to(RepositoryRepository::class.java)
-            .singleton()
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
 
-        bind(IRepositoryDataStore::class.java)
-            .to(RepositoryDataStore::class.java)
-            .singleton()
-    }
+    @Binds
+    abstract fun bindIRepositoryRepository(
+        repositoryRepository: RepositoryRepository
+    ): IRepositoryRepository
+
+    @Binds
+    abstract fun bindIRepositoryDataStore(
+        repositoryDataStore: RepositoryDataStore
+    ): IRepositoryDataStore
 }

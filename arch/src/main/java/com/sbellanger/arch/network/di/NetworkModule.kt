@@ -1,30 +1,50 @@
 package com.sbellanger.arch.network.di
 
 import com.sbellanger.arch.network.IWsConfig
-import com.sbellanger.arch.network.api.GithubApiFactory
 import com.sbellanger.arch.network.api.GithubWsConfig
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import toothpick.config.Module
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
-class NetworkModule : Module() {
-    init {
-        // Configuration
-        bind(IWsConfig::class.java)
-            .toInstance(GithubWsConfig)
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
 
-        // Factory
-        bind(GithubApiFactory::class.java)
-            .to(GithubApiFactory::class.java)
-            .singleton()
+    @Provides
+    fun provideIWsConfig(): IWsConfig {
+        return GithubWsConfig
+    }
 
-        // App Api
-        bind(Retrofit::class.java)
-            .toProvider(RetrofitProvider::class.java)
+    @Provides
+    fun provideRetrofit(
+        httpClient: OkHttpClient,
+        configWs: IWsConfig
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(configWs.getBaseUrl() + "/")
+            .client(httpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+    }
 
-        // Http Client
-        bind(OkHttpClient::class.java)
-            .toProvider(HttpClientProvider::class.java)
-            .providesSingleton()
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient
+            .Builder()
+            .addNetworkInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
+            .build()
     }
 }

@@ -1,22 +1,34 @@
 package com.sbellanger.gitsearch.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.fragment.app.FragmentActivity
 import com.sbellanger.arch.navigation.IAppFragmentBuilder
 import com.sbellanger.arch.navigation.IAppNavigation
-import com.sbellanger.gitsearch.databinding.MainActivityBinding
-import toothpick.config.Module
-import toothpick.ktp.binding.bind
+import com.sbellanger.arch.network.IWsConfig
+import com.sbellanger.arch.network.api.GithubWsConfig
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
-class GitSearchActivityModule(activity: AppCompatActivity) : Module() {
-    init {
-        bind(FragmentActivity::class.java).toInstance(activity)
-        bind<MainActivityBinding>().toInstance(MainActivityBinding.inflate(activity.layoutInflater))
-        bind<IAppFragmentBuilder>().toClass<GitSearchFragmentBuilder>()
-        bind<IAppNavigation>().toClass<GitSearchNavigator>()
-    }
+@Module
+@InstallIn(ActivityComponent::class)
+abstract class GitSearchActivityModule {
+
+    @Binds
+    abstract fun bindIWsConfig(
+        githubWsConfig: GithubWsConfig
+    ): IWsConfig
+
+    @Binds
+    abstract fun bindIAppFragmentBuilder(
+        gitSearchFragmentBuilder: GitSearchFragmentBuilder
+    ): IAppFragmentBuilder
+
+    @Binds
+    abstract fun bindIAppNavigation(
+        gitSearchNavigator: GitSearchNavigator
+    ): IAppNavigation
 }

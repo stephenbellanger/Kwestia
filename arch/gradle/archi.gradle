@@ -14,7 +14,6 @@ dependencies {
     api "androidx.room:room-ktx:$rootProject.depRoomVersion"
     api "androidx.room:room-rxjava2:$rootProject.depRoomVersion"
 
-    // Toothpick
-    api "com.github.stephanenicolas.toothpick:ktp:$rootProject.depToothpickVersion"
-    api "com.github.stephanenicolas.toothpick:smoothie-androidx:$rootProject.depToothpickVersion"
+    // Hilt
+    api "com.google.dagger:hilt-android:$project.depHiltVersion"
 }

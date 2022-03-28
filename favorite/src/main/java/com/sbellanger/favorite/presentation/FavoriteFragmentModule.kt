@@ -1,15 +1,21 @@
 package com.sbellanger.favorite.presentation
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import toothpick.config.Module
-import toothpick.ktp.binding.bind
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 
-class FavoriteFragmentModule(fragment: Fragment) : Module() {
-    init {
-        bind<IFavoriteContract.ViewModel>()
-            .toInstance(ViewModelProvider(fragment)[FavoriteViewModel::class.java])
-        bind<IFavoriteContract.ViewNavigation>()
-            .toClass<FavoriteNavigator>()
-    }
+@Module
+@InstallIn(FragmentComponent::class)
+abstract class FavoriteFragmentModule {
+
+    /*@Binds
+    abstract fun bindIFavoriteContractViewModel(
+        favoriteViewModel: FavoriteViewModel
+    ): IFavoriteContract.ViewModel*/
+
+    @Binds
+    abstract fun bindIFavoriteContractViewNavigation(
+        favoriteNavigator: FavoriteNavigator
+    ): IFavoriteContract.ViewNavigation
 }

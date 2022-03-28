@@ -7,14 +7,9 @@ import com.sbellanger.arch.navigation.IAppNavigation
 import com.sbellanger.gitsearch.R
 import javax.inject.Inject
 
-class GitSearchNavigator @Inject constructor() : IAppNavigation {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // DEPENDENCY
-    ///////////////////////////////////////////////////////////////////////////
-
-    @Inject
-    lateinit var activity: FragmentActivity
+class GitSearchNavigator @Inject constructor(
+    private val activity: FragmentActivity
+) : IAppNavigation {
 
     ///////////////////////////////////////////////////////////////////////////
     // SPECIALIZATION

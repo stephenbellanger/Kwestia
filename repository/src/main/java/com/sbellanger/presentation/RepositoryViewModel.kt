@@ -3,18 +3,20 @@ package com.sbellanger.presentation
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
-import com.sbellanger.arch.viewmodel.KtpBaseViewModel
+import com.sbellanger.arch.viewmodel.BaseViewModel
 import com.sbellanger.domain.model.RepositoryEntity
 import com.sbellanger.domain.usecase.AddRepositoryUseCase
 import com.sbellanger.domain.usecase.GetRepositoryViewStateUseCase
 import com.sbellanger.domain.usecase.RemoveRepositoryUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@HiltViewModel
 class RepositoryViewModel @Inject constructor(application: Application) :
-    KtpBaseViewModel(application),
+    BaseViewModel(application),
     IRepositoryContract.ViewModel {
 
     companion object {

@@ -1,15 +1,21 @@
 package com.sbellanger.issue.presentation
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import toothpick.config.Module
-import toothpick.ktp.binding.bind
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 
-class IssueFragmentModule(fragment: Fragment) : Module() {
-    init {
-        bind<IIssueContract.ViewModel>()
-            .toInstance(ViewModelProvider(fragment)[IssueViewModel::class.java])
-        bind<IIssueContract.ViewNavigation>()
-            .toClass<IssueNavigator>()
-    }
+@Module
+@InstallIn(FragmentComponent::class)
+abstract class IssueFragmentModule {
+
+    /*@Binds
+    abstract fun bindIIssueContractViewModel(
+        issueViewModel: IssueViewModel
+    ): IIssueContract.ViewModel*/
+
+    @Binds
+    abstract fun bindIIssueContractViewNavigation(
+        issueNavigator: IssueNavigator
+    ): IIssueContract.ViewNavigation
 }

@@ -48,4 +48,6 @@ dependencies {
     api "androidx.compose.foundation:foundation:$project.depComposeVersion"
     api "androidx.compose.material:material:$project.depComposeVersion"
 
+    api 'androidx.fragment:fragment-ktx:1.5.0-alpha03'
+
 }

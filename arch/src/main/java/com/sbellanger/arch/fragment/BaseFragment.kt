@@ -9,7 +9,6 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import com.sbellanger.arch.helper.timberConcreteClassLinkTag
 import timber.log.Timber
-import toothpick.ktp.KTP
 
 abstract class BaseFragment : Fragment() {
 
@@ -43,7 +42,6 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.v(timberConcreteClassLinkTag)
-        injectDependencies()
     }
 
     @CallSuper
@@ -73,7 +71,6 @@ abstract class BaseFragment : Fragment() {
     @CallSuper
     override fun onDestroyView() {
         Timber.v(timberConcreteClassLinkTag)
-        KTP.closeScope(this)
         super.onDestroyView()
     }
 
@@ -87,17 +84,5 @@ abstract class BaseFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         Timber.v(timberConcreteClassLinkTag)
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // HELPER
-    ///////////////////////////////////////////////////////////////////////////
-
-    // A scope is open for every fragment that is open, even if not a KtpFragment, like that it is closed onDestroyed
-    // Injection is not done, this can be overridden to handle Ktp mechanisms
-    open fun injectDependencies() {
-        KTP.openRootScope()
-            .openSubScope(requireActivity())
-            .openSubScope(this)
     }
 }
